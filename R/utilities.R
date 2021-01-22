@@ -320,9 +320,9 @@ refine_clusts_knn = function(H,clusts,k,eps=0.1)
   {
     clusts_H = clusts[rownames(H[[i]])]
     nuclei = nrow(H[[i]])
-    k = ifelse(k < 1, round(k*nuclei), k)
-    print(c(i, k))
-    H_knn = RANN::nn2(H[[i]],eps=eps,k=k,searchtype="standard")
+    knew = ifelse(k < 1, round(k*nuclei), k)
+    print(c(i, knew))
+    H_knn = RANN::nn2(H[[i]],eps=eps,k=knew,searchtype="standard")
     #for (j in 1:length(clusts_H))
     #{
     #  clusts_H[j] = names(which.max(table(clusts_H[H_knn$nn.idx[j,]])))
