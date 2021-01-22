@@ -319,6 +319,9 @@ refine_clusts_knn = function(H,clusts,k,eps=0.1)
   for (i in 1:length(H))
   {
     clusts_H = clusts[rownames(H[[i]])]
+    nuclei = nrow(H[[i]])
+    k = ifelse(k < 1, round(k*nuclei), k)
+    print(c(i, k))
     H_knn = RANN::nn2(H[[i]],eps=eps,k=k,searchtype="standard")
     #for (j in 1:length(clusts_H))
     #{
