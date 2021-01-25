@@ -3065,17 +3065,22 @@ quantile_norm.liger <- function(
 #' }
 #'
 
-louvainCluster <- function(object, resolution = 1.0, k = 20, prune = 1 / 15, eps = 0.1, nRandomStarts = 10,
+louvainCluster <- function(object, dims.use=NULL, resolution = 1.0, k = 20, prune = 1 / 15, eps = 0.1, nRandomStarts = 10,
                            nIterations = 100, random.seed = 1) {
   output_path <- paste0('edge_', sub('\\s', '_', Sys.time()), '.txt')
   output_path = sub(":","_",output_path)
   output_path = sub(":","_",output_path)
+  if (is.null(dims.use)) {
+	      use_these_factors <- 1:ncol(object@H.norm[[1]])
+    } else {
+	        use_these_factors <- dims.use
+  }
   if (dim(object@H.norm)[1] == 0){
     print("Louvain Clustering on unnormalized cell factor loadings.")
-    knn <- RANN::nn2(Reduce(rbind, object@H), k = k, eps = eps)
+    knn <- RANN::nn2(Reduce(rbind, object@H[,dims.use]), k = k, eps = eps)
   } else {
     print("Louvain Clustering on quantile normalized cell factor loadings.")
-    knn <- RANN::nn2(object@H.norm, k = k, eps = eps)
+    knn <- RANN::nn2(object@H.norm[,dims.use], k = k, eps = eps)
   }
   snn <- ComputeSNN(knn$nn.idx, prune = prune)
   WriteEdgeFile(snn, output_path, display_progress = F)
